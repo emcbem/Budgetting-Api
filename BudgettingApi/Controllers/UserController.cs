@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using BudgettingApi.Configs;
 using BudgettingApi.Data;
+using BudgettingApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,34 +13,16 @@ namespace BudgettingApi.Controllers;
 [Route(ApiConsts.SecureRoute + "[controller]")]
 public class UserController : Controller
 {
-    private readonly IDbContextFactory<BudgettingDbContext> _dbFactory;
+    private readonly IUserService userService;
 
-    public UserController(IDbContextFactory<BudgettingDbContext> db)
+    public UserController(IUserService userService)
     {
-        _dbFactory = db;
+        this.userService = userService;
     }
     [HttpGet("getdata")]
     public async Task<IActionResult> GetData()
     {
-        System.Console.WriteLine("here");
-        var providerId = User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value ?? throw new Exception("Unable to parse user data");
-        var email = User.FindFirst("https://budgetting/email")?.Value ?? throw new Exception("Unable to parse user data");
-        var db = _dbFactory.CreateDbContext();
-
-        var user = await db.Users.FirstOrDefaultAsync(u => u.ProviderId == providerId);
-        if (user == null)
-        {
-            user = new User
-            {
-                ProviderId = providerId,
-                Email = email,
-            };
-            db.Users.Add(user);
-
-            await db.SaveChangesAsync();
-        }
-        Console.WriteLine("User retriveed");
-
-        return Ok(user);
+        var user = await userService.GetUserFromClaims(User, user => user.Include(u => u.Budgets));
+        return Ok(user.ToDto());
     }
 }

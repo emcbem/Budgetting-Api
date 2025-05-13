@@ -9,6 +9,7 @@ public class BudgettingDbContext : DbContext
     public BudgettingDbContext(DbContextOptions<BudgettingDbContext> options) : base(options) { }
 
     public virtual DbSet<User> Users {get; set;}
+    public virtual DbSet<UserBudget> UserBudgets {get; set;}
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -21,6 +22,18 @@ public class BudgettingDbContext : DbContext
            entity.Property(e => e.Email).HasColumnName("email");
            entity.Property(e => e.Name).HasColumnName("name");
            entity.Property(e => e.ProviderId).HasColumnName("provider_id");
+        });
+
+        modelBuilder.Entity<UserBudget>(entity => {
+            entity.HasKey(e => e.Id).HasName("user_budget_pkey");
+            entity.ToTable("user_budget");
+
+            entity.Property(e => e.Id).HasColumnName("id").UseIdentityAlwaysColumn();
+            entity.Property(e => e.Name).HasColumnName("name");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+            entity.Property(e => e.BudgetPercentage).HasColumnName("budget_percentage");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Budgets).HasForeignKey(p => p.UserId);
         });
     }
 }
