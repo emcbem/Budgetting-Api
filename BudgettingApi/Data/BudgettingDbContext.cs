@@ -32,6 +32,7 @@ public class BudgettingDbContext : DbContext
             entity.Property(e => e.Name).HasColumnName("name");
             entity.Property(e => e.UserId).HasColumnName("user_id");
             entity.Property(e => e.BudgetPercentage).HasColumnName("budget_percentage");
+            entity.Property(e => e.CurrentSavedTotal).HasColumnName("current_saved_total");
 
             entity.HasOne(d => d.User).WithMany(p => p.Budgets).HasForeignKey(p => p.UserId);
         });
