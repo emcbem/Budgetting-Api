@@ -1,4 +1,5 @@
 using BudgettingApi.Configs;
+using BudgettingApi.Data;
 using BudgettingApi.Data.Requests.Adds;
 using BudgettingApi.Data.Requests.Updates;
 using BudgettingApi.Services;
@@ -37,6 +38,25 @@ public class BudgetController : Controller
     public async Task<IActionResult> UpdateBudget(UpdateBudgetRequest updateBudgetRequest)
     {
         await budgetService.UpdateBudgetFromUser(updateBudgetRequest, User);
+        return Ok();
+    }
+
+    public sealed record UserConcerns
+    {
+        public string userConcerns { get; set; } = "";
+    }
+
+    [HttpPost("aiBudgetRequest")]
+    public async Task<IActionResult> GetAiBudgetRequest(UserConcerns userConcerns)
+    {
+        var resopnse = await budgetService.GetUserCurratedAiBudgets(userConcerns.userConcerns);
+        return Ok(resopnse);
+    }
+
+    [HttpPost("acceptaibudget")]
+    public async Task<IActionResult> AcceptAiResponse(AiBudgetRequest aiBudgetRequest)
+    {
+        await budgetService.AcceptAiResponse(aiBudgetRequest, User);
         return Ok();
     }
 }

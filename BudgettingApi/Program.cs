@@ -1,3 +1,4 @@
+using BudgettingApi;
 using BudgettingApi.Data;
 using BudgettingApi.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -8,7 +9,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.WebHost.UseUrls("http://localhost:8080");
 
 builder.Services.AddControllers();
 
@@ -45,6 +45,7 @@ builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.Al
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IBudgetService, BudgetService>();
 builder.Services.AddScoped<IAllocationService, AllocationService>();
+builder.Services.AddScoped<IAiService, AiService>();
 
 
 var app = builder.Build();

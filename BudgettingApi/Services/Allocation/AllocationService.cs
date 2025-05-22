@@ -18,14 +18,14 @@ public class AllocationService : IAllocationService
     {
         var user = await userService.GetUserFromClaims(User, (u => u.Include(u2 => u2.Budgets)));
 
-        foreach(var budget in user.Budgets)
+        foreach (var budget in user.Budgets)
         {
-            budget.CurrentSavedTotal += totalToAllocate * (budget.BudgetPercentage/100);
+            budget.CurrentSavedTotal += totalToAllocate * (budget.BudgetPercentage / 100);
         }
 
         var context = dbContextFactory.CreateDbContext();
 
         context.UpdateRange(user.Budgets);
         await context.SaveChangesAsync();
-}
+    }
 }
