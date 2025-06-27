@@ -10,6 +10,7 @@ public class UserBudget
     public float BudgetPercentage { get; set; }
     public float CurrentSavedTotal {get; set;}
     public string Name { get; set; } = "";
+    public bool IsSavings { get; set; } = false;
 
     public virtual User User { get; set; } = null!;
 }
@@ -23,7 +24,8 @@ public static class UserBudgetConverter
             Name = userBudget.Name,
             Id = userBudget.Id,
             BudgetPercentage = userBudget.BudgetPercentage,
-            CurrentSavedTotal = userBudget.CurrentSavedTotal
+            CurrentSavedTotal = userBudget.CurrentSavedTotal,
+            IsSavings = userBudget.IsSavings
         };
     }
 }
@@ -41,4 +43,7 @@ public class UserBudgetDto
 
     [JsonPropertyName("currentTotal")]
     public float CurrentSavedTotal { get; set; }
+
+    [JsonPropertyName("isSavings")]
+    public bool IsSavings { get; set; }
 }

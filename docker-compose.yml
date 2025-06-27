@@ -1,11 +1,15 @@
 services:
-  api:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "5000:8080"
+  db:
+    image: postgres:16
+    restart: always
     environment:
-      DB_CONN: Host=db;Database=appdb;Username=appuser;Password=apppassword
-    depends_on:
-      - db
+      POSTGRES_DB: appdb
+      POSTGRES_USER: appuser
+      POSTGRES_PASSWORD: apppassword
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

@@ -67,6 +67,10 @@ namespace BudgettingApi.Migrations
                         .HasColumnType("real")
                         .HasColumnName("current_saved_total");
 
+                    b.Property<bool>("IsSavings")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_savings");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
